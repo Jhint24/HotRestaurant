@@ -8,26 +8,30 @@ var http = require("http");
 var fs = require("fs");
 require("./app/apiRoutes");
 require("./app/htmlRoutes");
+// Sets up the Express App
+// =============================================================
+var app = express();
+var PORT = 3000;
 
 //Sets up the server and function for requests to it
 // =============================================================
-var server = http.createServer(handleRequest);
+// var server = http.createServer(handleRequest);
 
-function handleRequest(req, res) {
-    var path = req.url;
-    switch (path) {
+// function handleRequest(req, res) {
+//     var path = req.url;
+//     switch (path) {
 
-        case "/":
-          return displayHome(path, req, res);
+//         case "/":
+//           return displayHome(path, req, res);
       
-        case "/reserve":
-          return displayReserve(path, req, res);
+//         case "/reserve":
+//           return displayReserve(path, req, res);
 
-          case "/tables":
-          return displayTables(path, req, res);  
+//           case "/tables":
+//           return displayTables(path, req, res);  
         
-        }
-}
+//         }
+// }
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function () {
@@ -43,11 +47,24 @@ function displayHome(url, req, res)  {
       res.end(data);
     });
   }
+  function displayReserve(url, req, res)  {
+    
+    fs.readFile(__dirname + "/reserve.html", function(err, data) {
+  
+      res.writeHead(200, { "Content-Type": "text/html" });
+      res.end(data);
+    });
+  }
+  function displayTables(url, req, res)  {
+    
+    fs.readFile(__dirname + "/tables.html", function(err, data) {
+  
+      res.writeHead(200, { "Content-Type": "text/html" });
+      res.end(data);
+    });
+  }
 
-// Sets up the Express App
-// =============================================================
-var app = express();
-var PORT = 3000;
+
 
 // Sets up the Express app to handle data parsing
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -76,7 +93,7 @@ var waitList = [];
 // Basic route that sends the user first to the AJAX Page
 app.get("/", function (req, res) {
     // res.send("Welcome to the Star Wars Page!")
-    res.sendFile(path.join(__dirname, "view.html"));
+    res.sendFile(path.join(__dirname, "home.html"));
 });
 
 // Displays all characters
@@ -84,7 +101,7 @@ app.get("/api/reservations", function (req, res) {
     return res.json(reservations);
 });
 
-// Displays a single character, or returns false
+//Displays a single character, or returns false
 app.get("/api/reservations/:reservation", function (req, res) {
     var chosen = req.params.reservation;
 
