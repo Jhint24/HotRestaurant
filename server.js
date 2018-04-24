@@ -14,6 +14,24 @@ app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 
+
+
+app.post('/api/clear', function (req, res) {
+    console.log('clear all reservations');
+    reservations = [];
+    res.sendFile(path.join(__dirname, 'app/public/reservations.html'));
+  });
+
+
+  
+app.post('/api/killreservation', function (req, res) {
+    console.log(req.body.id);
+
+    reservations.splice(req.body.id, 1);
+    // console.log(reservations);
+    res.json(reservations);
+});
+
 //nicole
 app.post("/api/reservations", function (req, res) {
     var newReservation = req.body;
@@ -39,8 +57,6 @@ app.post("/api/reservations", function (req, res) {
         }
     }
 });
-
-
 
 
 
