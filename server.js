@@ -1,8 +1,11 @@
+
 // Dependencies
 // =============================================================
 var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
+require("./app/routing/apiRoutes")(app);
+require("./app/routing/htmlRoutes")(app);
 
 // Sets up the Express App
 // =============================================================
@@ -78,3 +81,4 @@ app.post("/api/reservations", function (req, res) {
 app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
 });
+
