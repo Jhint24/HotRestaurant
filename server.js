@@ -4,8 +4,45 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
-require("./app/routing/apiRoutes")(app);
-require("./app/routing/htmlRoutes")(app);
+var http = require("http");
+var fs = require("fs");
+require("./app/apiRoutes");
+require("./app/htmlRoutes");
+
+//Sets up the server and function for requests to it
+// =============================================================
+var server = http.createServer(handleRequest);
+
+function handleRequest(req, res) {
+    var path = req.url;
+    switch (path) {
+
+        case "/":
+          return displayHome(path, req, res);
+      
+        case "/reserve":
+          return displayReserve(path, req, res);
+
+          case "/tables":
+          return displayTables(path, req, res);  
+        
+        }
+}
+// Starts the server to begin listening
+// =============================================================
+app.listen(PORT, function () {
+    console.log("App listening on PORT " + PORT);
+});
+// fs functions to run in switch
+// =============================================================
+function displayHome(url, req, res)  {
+    
+    fs.readFile(__dirname + "/home.html", function(err, data) {
+  
+      res.writeHead(200, { "Content-Type": "text/html" });
+      res.end(data);
+    });
+  }
 
 // Sets up the Express App
 // =============================================================
@@ -76,9 +113,5 @@ app.post("/api/reservations", function (req, res) {
     }
 });
 
-// Starts the server to begin listening
-// =============================================================
-app.listen(PORT, function () {
-    console.log("App listening on PORT " + PORT);
-});
+
 
